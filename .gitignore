@@ -1,0 +1,97 @@
+# Windows Desktop Automator - Git Ignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs and artifacts (keep structure but ignore content)
+artifacts/logs/*.log
+artifacts/logs/*.json
+artifacts/screens/*.png
+artifacts/screens/*.jpg
+artifacts/ocr_debug/*
+
+# Keep artifact directories
+!artifacts/logs/.gitkeep
+!artifacts/screens/.gitkeep
+!artifacts/ocr_debug/.gitkeep
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Windows specific
+*.lnk
+*.exe
+*.msi
+
+# Project specific
+.pytest_cache/
+*.pyc
+node_modules/

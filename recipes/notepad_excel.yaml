@@ -1,0 +1,212 @@
+name: "notepad_excel_demo"
+description: "Demonstration automation flow: Launch Notepad, type text, copy to Excel"
+version: "1.0"
+author: "Windows Desktop Automator"
+tags: ["demo", "notepad", "excel", "file-operations"]
+
+variables:
+  demo_text: "Hello from Windows Desktop Automator!"
+  temp_file: "artifacts/demo_text.txt"
+  excel_file: "artifacts/demo_data.xlsx"
+
+steps:
+  # Step 1: Launch Notepad
+  - name: "Launch Notepad"
+    action: "launch"
+    target:
+      app: "notepad.exe"
+    timeout: 15
+    retry_attempts: 3
+    verify_after: true
+
+  # Step 2: Wait for Notepad window to be ready
+  - name: "Wait for Notepad window"
+    action: "wait_for"
+    target:
+      app: "notepad.exe"
+      window:
+        name: "Untitled - Notepad"
+    timeout: 10
+    retry_attempts: 2
+
+  # Step 3: Type demo text into Notepad
+  - name: "Type demo text"
+    action: "type"
+    target:
+      app: "notepad.exe"
+      window:
+        name: "Untitled - Notepad"
+      element:
+        control_type: "Edit"
+        class_name: "Edit"
+      text: "${demo_text}\n\nThis is a demonstration of the Windows Desktop Automator.\nGenerated at: $(Get-Date)"
+    timeout: 5
+    verify_after: true
+
+  # Step 4: Select all text
+  - name: "Select all text"
+    action: "hotkey"
+    target:
+      app: "notepad.exe"
+      window:
+        name: "Untitled - Notepad"
+      text: "ctrl+a"
+    timeout: 3
+
+  # Step 5: Copy text to clipboard
+  - name: "Copy text"
+    action: "hotkey"
+    target:
+      app: "notepad.exe"
+      window:
+        name: "Untitled - Notepad"
+      text: "ctrl+c"
+    timeout: 3
+
+  # Step 6: Save file as temp file
+  - name: "Save to temp file"
+    action: "hotkey"
+    target:
+      app: "notepad.exe"
+      window:
+        name: "Untitled - Notepad"
+      text: "ctrl+s"
+    timeout: 5
+
+  # Step 7: Wait for Save dialog
+  - name: "Wait for Save dialog"
+    action: "wait_for"
+    target:
+      app: "notepad.exe"
+      window:
+        name: "Save As"
+    timeout: 10
+
+  # Step 8: Type filename in Save dialog
+  - name: "Enter filename"
+    action: "type"
+    target:
+      window:
+        name: "Save As"
+      element:
+        control_type: "ComboBox"
+        automation_id: "1001"
+      text: "${temp_file}"
+    timeout: 5
+    clear_first: true
+
+  # Step 9: Click Save button
+  - name: "Click Save"
+    action: "click"
+    target:
+      window:
+        name: "Save As"
+      element:
+        control_type: "Button"
+        name: "Save"
+    timeout: 5
+    verify_after: true
+
+  # Step 10: Verify file was saved
+  - name: "Verify file exists"
+    action: "verify"
+    target:
+      file_path: "${temp_file}"
+    timeout: 3
+
+  # Step 11: Launch Excel
+  - name: "Launch Excel"
+    action: "launch"
+    target:
+      app: "excel.exe"
+    timeout: 20
+    retry_attempts: 3
+    verify_after: true
+    continue_on_failure: true  # Continue even if Excel launch fails
+
+  # Step 12: Wait for Excel to be ready
+  - name: "Wait for Excel"
+    action: "wait_for"
+    target:
+      app: "excel.exe"
+      window:
+        name: "Excel"
+    timeout: 15
+    continue_on_failure: true
+
+  # Step 13: Click on cell A1
+  - name: "Click cell A1"
+    action: "click"
+    target:
+      app: "excel.exe"
+      window:
+        name: "Excel"
+      element:
+        control_type: "Custom"
+        name: "A1"
+    timeout: 10
+    retry_attempts: 2
+    continue_on_failure: true
+
+  # Step 14: Paste clipboard content
+  - name: "Paste content"
+    action: "hotkey"
+    target:
+      app: "excel.exe"
+      window:
+        name: "Excel"
+      text: "ctrl+v"
+    timeout: 5
+    continue_on_failure: true
+
+  # Step 15: Save Excel file (Ctrl+S then enter filename)
+  - name: "Save Excel file"
+    action: "hotkey"
+    target:
+      app: "excel.exe"
+      window:
+        name: "Excel"
+      text: "ctrl+s"
+    timeout: 10
+    continue_on_failure: true
+
+  # Step 16: Take final screenshot
+  - name: "Take screenshot"
+    action: "screenshot"
+    target:
+      file_path: "final_result.png"
+    timeout: 5
+    continue_on_failure: true
+
+  # Step 17: Read text from saved file using file operations
+  - name: "Read saved text file"
+    action: "file_read"
+    target:
+      file_path: "${temp_file}"
+    timeout: 5
+    continue_on_failure: true
+
+  # Step 18: Create a summary file
+  - name: "Create summary file"
+    action: "file_write"
+    target:
+      file_path: "artifacts/automation_summary.txt"
+      text: |
+        Windows Desktop Automator - Execution Summary
+        ============================================
+        Recipe: ${name}
+        Executed: $(Get-Date)
+        
+        Steps completed:
+        1. Launched Notepad
+        2. Typed demo text
+        3. Saved text to file: ${temp_file}
+        4. Launched Excel (if available)
+        5. Pasted content to Excel
+        6. Saved Excel file
+        7. Created this summary
+        
+        Original demo text: ${demo_text}
+        
+        This automation demonstrates the core capabilities of the Windows Desktop Automator.
+    timeout: 3
