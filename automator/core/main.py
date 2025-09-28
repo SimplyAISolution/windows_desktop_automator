@@ -12,10 +12,10 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import typer
-from rich.console import Console
 from rich.progress import Progress, TaskID
 from rich.table import Table
 
+from automator.core.console_utils import console
 from automator.core.dsl import Recipe, ActionStep, ActionType, RecipeValidationError, load_recipe_from_dict
 from automator.core.logger import automator_logger
 from automator.providers.process import ProcessProvider  
@@ -25,7 +25,6 @@ from automator.providers.ocr import OCRProvider
 
 
 app = typer.Typer(help="Windows Desktop Automator - Execute automation recipes")
-console = Console()
 
 
 class AutomationOrchestrator:
