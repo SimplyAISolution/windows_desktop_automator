@@ -24,7 +24,7 @@ A powerful Python-based automation framework for Windows desktop applications us
 
 1. **Clone the repository**:
    ```powershell
-   git clone <repository-url>
+   git clone <https://github.com/SimplyAISolution/windows_desktop_automator.git>
    cd windows_desktop_automator
    ```
 
